@@ -1,0 +1,71 @@
+<section class="scrolling-text">
+  <div class="scrolling-text-container">
+    <p class="scrolling-text-content">{{ section.settings.scroll_text }}</p>
+  </div>
+</section>
+
+<style>
+/* ==============================
+   Scrolling Text Section
+   ============================== */
+.scrolling-text {
+  background-color: #2e3b2b; /* Dark background like Tentree */
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.scrolling-text-container {
+  display: flex;
+  justify-content: flex-start;
+  animation: slideText 20s linear infinite;
+}
+
+.scrolling-text-content {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding-right: 50px; /* Space between repeating text */
+}
+
+@keyframes slideText {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const textContainer = document.querySelector('.scrolling-text-container');
+  const contentWidth = textContainer.scrollWidth;
+  
+  textContainer.style.animationDuration = `${contentWidth / 50}s`; // Adjust speed based on text length
+});
+</script>
+
+{% schema %}
+{
+  "name": "Scrolling Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "scroll_text",
+      "label": "Scrolling Text",
+      "default": "Together we’ve planted 115,206,885 trees."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling Text",
+      "category": "Home Page"
+    }
+  ]
+}
+{% endschema %}

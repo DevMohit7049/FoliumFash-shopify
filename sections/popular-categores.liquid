@@ -1,0 +1,185 @@
+<section class="popular-categories">
+  <div class="category-header">
+    <h2 class="section-title">Most Popular Categories</h2>
+
+    <div class="scroll-arrows">
+      <button class="scroll-btn left" aria-label="Scroll left">‹</button>
+      <button class="scroll-btn right" aria-label="Scroll right">›</button>
+    </div>
+  </div>
+
+  <div class="category-scroll" id="category-scroll">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link }}" class="category-card">
+        <img
+          src="{{ block.settings.image | img_url: '600x' }}"
+          alt="{{ block.settings.title }}"
+          loading="lazy"
+          height=""
+          width=""
+        >
+        <p class="category-title">{{ block.settings.title }}</p>
+        <span class="category-arrow">↠</span>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+.popular-categories {
+  padding: 60px 5%;
+  background-color: #fafafa;
+  overflow: hidden;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  letter-spacing: -0.5px;
+}
+
+.scroll-arrows {
+  display: flex;
+  gap: 10px;
+}
+
+.scroll-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* Horizontal scroll row */
+.category-scroll {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each card */
+.category-card {
+  flex: 0 0 auto;
+  width: 260px;
+  text-align: left;
+  text-decoration: none;
+  color: #111;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover img {
+  transform: scale(1.04);
+}
+
+.category-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.category-arrow {
+  font-size: 1.2rem;
+  color: #666;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.category-card:hover .category-arrow {
+  color: #111;
+  transform: translateX(4px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.5rem;
+  }
+  .category-card {
+    width: 180px;
+  }
+  .category-card img {
+    height: 220px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollContainer = document.getElementById('category-scroll');
+  const leftBtn = document.querySelector('.scroll-btn.left');
+  const rightBtn = document.querySelector('.scroll-btn.right');
+
+  leftBtn.addEventListener('click', () => {
+    scrollContainer.scrollBy({ left: -300, behavior: 'smooth' });
+  });
+
+  rightBtn.addEventListener('click', () => {
+    scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
+  });
+});
+</script>
+
+{% schema %}
+ {
+   "name": "popular categories",
+   "settings": [],
+   "blocks": [
+     {
+      "type": "category",
+       "name":"Category Card",
+       "settings": [
+        {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Category Image"
+        },
+        {
+         "type": "text",
+         "id": "title",
+         "label": "Category Title"
+        },
+        {
+         "type": "url",
+         "id": "link",
+         "label": "Category Link"
+        }
+       ]
+     }
+   ],
+   "presets": [{"name": "Popular Categories","category": "Home Page"}]
+ }
+{% endschema %}

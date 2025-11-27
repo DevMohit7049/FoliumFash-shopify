@@ -1,0 +1,121 @@
+.footer-tentree {
+  background: #14332F; /* deep forest green */
+  color: #ECECE9;      /* light text */
+  padding: 60px 8%;
+  font-family: var(--font-body, sans-serif);
+}
+
+.footer-tentree__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.footer-tentree__col {
+  flex: 1 1 250px;
+}
+
+.footer-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #FFFFFF;
+}
+
+.footer-link-group__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link-group__list li {
+  margin-bottom: 0.6rem;
+}
+
+.footer-link-group__list li a {
+  color: #ECECE9;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.footer-link-group__list li a:hover {
+  color: #FFFFFF;
+}
+
+.footer-subscribe-form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.footer-subscribe-form input[type=email] {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.footer-subscribe-form button {
+  background: #F4F3EF; /* light accent */
+  color: #14332F;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.footer-social {
+  margin-top: 1.5rem;
+}
+
+.footer-social a {
+  margin-right: 0.8rem;
+  display: inline-block;
+}
+
+.footer-social a img {
+  width: 24px;
+  height: 24px;
+  filter: invert(1); /* if icons are black */
+}
+
+.footer-tentree__bottom {
+  margin-top: 60px;
+  border-top: 1px solid #2A4B45;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.footer-legal-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.2rem;
+}
+
+.footer-legal-links li a {
+  color: #B8C1B8;
+  text-decoration: none;
+}
+
+.footer-legal-links li a:hover {
+  color: #ECECE9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer-tentree__inner {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .footer-tentree__bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}

@@ -1,0 +1,67 @@
+
+{{ "footer.css" | asset_url | stylesheet_tag }}
+
+<footer class="site-footer">
+  <div class="footer-container">
+
+    <!-- Logo + Tagline -->
+    <div class="footer-column footer-brand">
+      <a href="{{ shop.url }}">
+        <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" class="footer-logo">
+      </a>
+      <p class="footer-tagline">
+        We plant ten trees for every item purchased. Join us in making an impact.
+      </p>
+    </div>
+
+    <!-- Shop Links -->
+    <div class="footer-column">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="{{ routes.all_products_collection_url }}">All Products</a></li>
+        <li><a href="{{routes.collections_url}}">New Arrivals</a></li>
+        <li><a href="{{ routes.collections_url }}">Sale</a></li>
+        <li><a href="/collections/best-sellers">Best Sellers</a></li>
+      </ul>
+    </div>
+
+    <!-- About Links -->
+    <div class="footer-column">
+      <h4>About</h4>
+      <ul>
+        <li><a href="/pages/about-us">Our Story</a></li>
+        <li><a href="/pages/sustainability">Sustainability</a></li>
+        <li><a href="/pages/impact">Our Impact</a></li>
+        <li><a href="/blogs/news">Blog</a></li>
+      </ul>
+    </div>
+
+    <!-- Help + Newsletter -->
+    <div class="footer-column">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="/pages/contact">Contact Us</a></li>
+        <li><a href="/pages/shipping">Shipping</a></li>
+        <li><a href="/pages/returns">Returns</a></li>
+        <li><a href="/pages/faqs">FAQs</a></li>
+      </ul>
+
+      <form method="post" action="/contact#newsletter" class="footer-newsletter">
+        <label for="email">Join Our Newsletter</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" required>
+        <button type="submit">Subscribe</button>
+      </form>
+
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><img src="{{ 'icon-facebook.svg' | asset_url }}" alt="Facebook"></a>
+        <a href="#" aria-label="Instagram"><img src="{{ 'icon-instagram.svg' | asset_url }}" alt="Instagram"></a>
+        <a href="#" aria-label="Twitter"><img src="{{ 'icon-twitter.svg' | asset_url }}" alt="Twitter"></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+  </div>
+</footer>

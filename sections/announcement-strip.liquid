@@ -1,0 +1,61 @@
+{% comment %}
+  Announcement strip section
+  - Displays active announcements from the metaobject: announcement_message
+  - Filters by date and shows "sticky" messages first
+{% endcomment %}
+
+{% assign announcements = shop.metaobjects.announcement_message.values | sort: "sticky" | reverse %}
+{% assign now = 'now' | date: "%s" %}
+
+<div class="annc-bar-container">
+  {% assign active_found = false %}
+  {% for a in announcements %}
+    {% assign start = a.start_date | date: "%s" %}
+    {% assign end = a.end_date | date: "%s" %}
+    {% if start <= now and end >= now %}
+      {% assign active_found = true %}
+      <div class="annc-bar" role="region" aria-label="Store announcement">
+        <div class="annc-message">
+          {% if a.url %}
+            <a href="{{ a.url }}" class="annc-link">{{ a.message }}</a>
+          {% else %}
+            {{ a.message }}
+          {% endif %}
+        </div>
+        <div class="annc-locale">
+          {{ localization.country.name }}, {{ localization.language.iso_code | upcase }} [{{ localization.country.currency.iso_code }}]
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% unless active_found %}
+    <div class="annc-bar">
+      <div class="annc-message">No active announcements</div>
+    </div>
+  {% endunless %}
+</div>
+
+<style>
+.annc-bar-container {
+  width: 100%;
+}
+.annc-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #18392b;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 16px;
+  text-align: center;
+}
+.annc-link {
+  color: #fff;
+  text-decoration: underline;
+}
+.annc-locale {
+  font-size: 12px;
+  opacity: 0.8;
+}
+</style>

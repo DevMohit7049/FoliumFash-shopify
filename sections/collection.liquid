@@ -1,0 +1,154 @@
+{% comment %} {% comment %}
+  This section is used in the collection template to render collection page
+  listing all products within a collection.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+{% endcomment %}
+
+<h1>{{ collection.title }}</h1>
+
+<div class="collection-products">
+  {% paginate collection.products by 20 %}
+    {% for product in collection.products %}
+      <div class="collection-product">
+        {% if product.featured_image %}
+          {% render 'image',
+            class: 'collection-product__image',
+            image: product.featured_image,
+            url: product.url,
+            width: 400,
+            height: 400,
+            crop: 'center'
+          %}
+        {% endif %}
+        <div class="collection-product__content">
+          <p>{{ product.title | escape | link_to: product.url }}</p>
+          <p>{{ product.price | money }}</p>
+        </div>
+      </div>
+    {% endfor %}
+
+    {{ paginate | default_pagination }}
+  {% endpaginate %}
+</div>
+
+{% stylesheet %}
+  .collection-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": []
+}
+{% endschema %} {% endcomment %}
+
+
+<section class="collection-page container">
+  <!-- Collection header -->
+  <div class="collection-header">
+    <h1 class="collection-title">{{ collection.title }}</h1>
+
+  </div>
+
+  <!-- Product grid -->
+  <div class="product-grid">
+    {% for product in collection.products %}
+      <div class="product-card">
+        <a href="{{ product.url }}" class="product-image-wrapper">
+          <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}">
+        </a>
+        <div class="product-info">
+          <a href="{{ product.url }}" class="product-title">{{ product.title }}</a>
+          <p class="product-price">{{ product.price | money }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p class="no-products">No products found in this collection.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+<style> 
+  .collection-page {
+  padding: 100px 20px;
+}
+
+.collection-header {
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.collection-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.collection-description {
+  color: #555;
+  font-size: 1rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+
+.product-card {
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.product-image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 15px;
+}
+
+.product-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 5px;
+  text-decoration: none;
+}
+
+.product-title:hover {
+  color: #008060;
+}
+
+.product-price {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.no-products {
+  text-align: center;
+  color: #777;
+  margin-top: 50px;
+}
+
+</style>

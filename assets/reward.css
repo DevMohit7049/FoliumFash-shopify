@@ -1,0 +1,91 @@
+.rewards-banner {
+  background-color: var(--rewards-bg, #4C5E55);
+  color: var(--rewards-text, #fff);
+  padding: 60px 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Content wrapper */
+.rewards-banner__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1400px;
+  gap: 2rem;
+}
+
+/* Left text block */
+.rewards-banner__text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.rewards-banner__heading {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: inherit;
+}
+
+.rewards-banner__subtext {
+  font-size: 1rem;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+/* Right button block */
+.rewards-banner__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.rewards-btn {
+  display: inline-block;
+  background-color: #F4F3EF;
+  color: #1A1A1A;
+  padding: 12px 26px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.rewards-btn:hover {
+  background-color: #E8E7E3;
+  transform: translateY(-2px);
+}
+
+.rewards-btn.secondary {
+  background-color: transparent;
+  border: 1px solid #F4F3EF;
+  color: #F4F3EF;
+}
+
+.rewards-btn.secondary:hover {
+  background-color: #F4F3EF;
+  color: #1A1A1A;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .rewards-banner__content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rewards-banner__buttons {
+    justify-content: center;
+  }
+
+  .rewards-banner__heading {
+    font-size: 1.6rem;
+  }
+}

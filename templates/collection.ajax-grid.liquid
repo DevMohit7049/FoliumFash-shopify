@@ -1,0 +1,21 @@
+{% layout none %}
+
+{% if collection.products_count > 0 %}
+  <div class="collection-grid new-arrival-scroll">
+    {% for product in collection.products %}
+      <div class="product-card">
+        <a href="{{ product.url }}" class="product-card-link">
+          <div class="product-image">
+            <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}" height="" width="">
+          </div>
+          <div class="product-info">
+            <p class="product-title">{{ product.title }}</p>
+            <p class="product-price">{{ product.price | money }}</p>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No products found in this collection.</p>
+{% endif %}

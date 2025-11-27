@@ -1,0 +1,160 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "home",
+      "settings": {
+        "hero_image": "shopify://shop_images/mnz-ToLMORRb97Q-unsplash.jpg",
+        "hero_title": "India's Most Trusted Fashion Brand",
+        "hero_subtitle": "Welcome to FoliumFash",
+        "hero_text": "Discover our doctor-formulated oral drops that bring wellness and glow from inside out.",
+        "hero_button_text": "Shop Now",
+        "hero_button_link": "",
+        "text_color": "#ffffff",
+        "button_bg": "#000000",
+        "button_text_color": "#ffffff"
+      }
+    },
+    "new_arrival_wfBcHT": {
+      "type": "new-arrival",
+      "name": "New Arrival Tabs",
+      "settings": {
+        "arrival_heading": "New Arrival"
+      }
+    },
+    "popular_categores_VTM6Li": {
+      "type": "popular-categores",
+      "blocks": {
+        "category_GGnGUn": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Womens_Sweaters_Cardigans_FA.jpg",
+            "title": "Women's Sweaters &Cardigans",
+            "link": "shopify://products/boreal-ten-hoodie-copy"
+          }
+        },
+        "category_8XgKKi": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Mens_Sweaters_FA.jpg",
+            "title": "Men's Sweaters",
+            "link": "shopify://collections/all"
+          }
+        },
+        "category_k9tBxC": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Womens_Jogger_Pants_Leggings_FA.jpg",
+            "title": "Women's Joggers , PantsLeggings",
+            "link": "shopify://collections/all"
+          }
+        },
+        "category_BqBtQq": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Mens_Joggers_Pants_FA.jpg",
+            "title": "Men's Sweatpants, JoggersPants",
+            "link": ""
+          }
+        },
+        "category_GzHNzG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Womens_Hoodies_Sweatshirts_FA.jpg",
+            "title": "Women's HoodiesSweatshirts",
+            "link": "shopify://collections/all"
+          }
+        },
+        "category_8GVFVW": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Mens_Hoodies_Sweatshirts_FA.jpg",
+            "title": "Men's Hoodies Sweatshirts",
+            "link": ""
+          }
+        },
+        "category_9DLBTY": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Womens_Dresses_Jumpsuits_FA.jpg",
+            "title": "Women's Dresses & Rompers",
+            "link": "shopify://collections/all"
+          }
+        },
+        "category_FUJURE": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Womens_Jackets_Coats_FA.jpg",
+            "title": "Women's Jackets Coats",
+            "link": "shopify://collections/all"
+          }
+        },
+        "category_b787iJ": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/FW25_SiteImageRefresh_HPCategories_Mens_Jackets_Coats_FA.jpg",
+            "title": "Men's Jackets, Coats Outerwear",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_GGnGUn",
+        "category_8XgKKi",
+        "category_k9tBxC",
+        "category_BqBtQq",
+        "category_GzHNzG",
+        "category_8GVFVW",
+        "category_9DLBTY",
+        "category_FUJURE",
+        "category_b787iJ"
+      ],
+      "name": "Popular Categories",
+      "settings": {}
+    },
+    "scrolling_counter_hdCWEB": {
+      "type": "scrolling-counter",
+      "name": "Scrolling Text",
+      "settings": {
+        "scroll_text": "Together we’ve planted 115,206 trees."
+      }
+    },
+    "new_arrival_zcqbKt": {
+      "type": "new-arrival",
+      "name": "New Arrival Tabs",
+      "settings": {
+        "arrival_heading": "Best seller"
+      }
+    },
+    "reward_k4x9pe": {
+      "type": "reward",
+      "name": "Rewards Banner",
+      "settings": {
+        "heading": "Get Rewarded For Doing Good",
+        "subtext": "Join our Rewards Program to earn points that can be used as cash on future purchases.",
+        "create_account_label": "Create Account",
+        "create_account_link": "",
+        "login_label": "Log in to view points",
+        "login_link": "",
+        "background_color": "#4C5E55",
+        "text_color": "#FFFFFF"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "new_arrival_wfBcHT",
+    "popular_categores_VTM6Li",
+    "scrolling_counter_hdCWEB",
+    "new_arrival_zcqbKt",
+    "reward_k4x9pe"
+  ]
+}
