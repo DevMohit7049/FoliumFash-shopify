@@ -1,6 +1,6 @@
 {{ 'new-arrival.css' | asset_url | stylesheet_tag }}
 
-<section class="new-arrival-section">
+<section class="new-arrival-section" id="section-{{ section.id }}">
   <div class="new-arrival-header">
     <h2 class="section-title">{{ section.settings.arrival_heading }}</h2>
     <div class="collection-tabs">
@@ -12,13 +12,13 @@
   <div id="collection-grid-{{ section.id }}" class="collection-grid"></div>
 </section>
 
-<script> 
-  document.addEventListener("DOMContentLoaded", function() {
-  const grid = document.getElementById(`collection-grid-{{ section.id }}`);
-  const tabs = document.querySelectorAll(".tab-btn");
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const sectionEl = document.getElementById("section-{{ section.id }}");
+  const grid = sectionEl.querySelector(`#collection-grid-{{ section.id }}`);
+  const tabs = sectionEl.querySelectorAll(".tab-btn");
   let isLoading = false;
 
-  // Generate shimmer placeholders dynamically
   const showShimmer = () => {
     const shimmerHTML = Array(6).fill(`
       <div class="product-card shimmer-card">
@@ -31,7 +31,6 @@
     grid.classList.add("loading");
   };
 
-  // Fade in animation
   const fade = (el, type, duration = 300) => {
     el.style.transition = `opacity ${duration}ms ease`;
     el.style.opacity = type === "in" ? 1 : 0;
@@ -42,14 +41,12 @@
     isLoading = true;
 
     fade(grid, "out");
-    showShimmer(); // Show shimmer instantly
+    showShimmer();
     fade(grid, "in");
 
     try {
       const res = await fetch(`/collections/${handle}?view=ajax-grid`);
       const html = await res.text();
-
-      console.log(html);  // Debugging: Log the returned HTML
 
       setTimeout(() => {
         fade(grid, "out");
@@ -57,12 +54,10 @@
           grid.innerHTML = html;
           grid.classList.remove("loading");
           fade(grid, "in");
-
-          // Rebind event listeners for dynamically loaded content
-          rebindTabEventListeners(); // Reattach events for tabs
           isLoading = false;
         }, 200);
-      }, 400);
+      }, 300);
+
     } catch (err) {
       grid.innerHTML = "<p>Something went wrong.</p>";
       fade(grid, "in");
@@ -70,27 +65,22 @@
     }
   };
 
-  // Rebind tab event listeners after loading new content
-  const rebindTabEventListeners = () => {
-    const tabs = document.querySelectorAll(".tab-btn");
-    tabs.forEach(tab => {
-      tab.addEventListener("click", function() {
-        if (this.classList.contains("active")) return;
-        tabs.forEach(t => t.classList.remove("active"));
-        this.classList.add("active");
-        loadCollection(this.dataset.handle);
-      });
+  tabs.forEach(tab => {
+    tab.addEventListener("click", function () {
+      if (this.classList.contains("active")) return;
+
+      tabs.forEach(t => t.classList.remove("active"));
+      this.classList.add("active");
+
+      loadCollection(this.dataset.handle);
     });
-  };
+  });
 
   // Default load
   loadCollection("womens");
-
-  // Initial binding of tab events
-  rebindTabEventListeners();
 });
-
 </script>
+
 
 {% schema %}
 {
