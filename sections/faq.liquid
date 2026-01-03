@@ -1,0 +1,127 @@
+<link href="{{ 'faq.css' | asset_url }}" rel="stylesheet"/>
+
+<section class="faq-section">
+  <div class="faq-container">
+    <!-- FAQ Header -->
+    <div class="faq-header">
+      <h2 class="faq-title">{{ section.settings.faq_title }}</h2>
+      {% if section.settings.faq_subtitle %}
+        <p class="faq-subtitle">{{ section.settings.faq_subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <!-- FAQ Items -->
+    <div class="faq-items">
+      {% for block in section.blocks %}
+        {% if block.type == 'faq_item' %}
+          <div class="faq-item" data-faq-index="{{ forloop.index }}">
+            <button class="faq-question" aria-expanded="false">
+              <span class="faq-question-text">{{ block.settings.question }}</span>
+              <span class="faq-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" style="display: none;">
+              <div class="faq-answer-content">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  // FAQ Accordion Functionality
+  document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', function() {
+      const faqItem = this.parentElement;
+      const answer = faqItem.querySelector('.faq-answer');
+      const isOpen = this.getAttribute('aria-expanded') === 'true';
+
+      // Close all other FAQs if configured
+      if ('{{ section.settings.single_open }}' === 'true') {
+        document.querySelectorAll('.faq-item').forEach(item => {
+          if (item !== faqItem) {
+            item.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            item.querySelector('.faq-answer').style.display = 'none';
+          }
+        });
+      }
+
+      // Toggle current FAQ
+      this.setAttribute('aria-expanded', !isOpen);
+      answer.style.display = isOpen ? 'none' : 'block';
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "faq_title",
+      "label": "FAQ Title",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "textarea",
+      "id": "faq_subtitle",
+      "label": "FAQ Subtitle",
+      "default": "Find answers to common questions"
+    },
+    {
+      "type": "checkbox",
+      "id": "single_open",
+      "label": "Only allow one FAQ open at a time",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "placeholder": "Enter your question here"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Section",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "We offer a 30-day return policy for all our products. Items must be in original condition."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "Standard shipping takes 5-7 business days. Express shipping options available at checkout."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

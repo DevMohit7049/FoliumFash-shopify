@@ -1,118 +1,158 @@
-<section class="product-page container">
-  <div class="product-wrapper">
-    <!-- Left side: Product Image -->
-    <div class="product-image">
-      <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
-    </div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="{{ 'product-page.css' | asset_url }}" rel="stylesheet"/>
 
-    <!-- Right side: Product Info -->
-    <div class="product-info">
-      <h1 class="product-title">{{ product.title }}</h1>
-      <p class="product-price">{{ product.price | money }}</p>
+<div class="breadcrumb">
+    <span>Home</span>
+    <span style="margin: 0 0.25rem;">|</span>
+    <span>{{ product.title }}</span>
+</div>
 
-      {% if product.description != blank %}
-        <p class="product-description">{{ product.description }}</p>
-      {% endif %}
-
-      <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
-        <select name="id" class="product-variants">
-          {% for variant in product.variants %}
-            <option value="{{ variant.id }}">
-              {{ variant.title }} - {{ variant.price | money }}
-            </option>
+  <main class=main-section>
+    <div class="product-grid">
+      <!-- Product Images Section -->
+      <div class="product-images">
+        <div class="image-grid">
+          {% for image in product.images limit: 4 %}
+            <div class="image-container">
+              <img alt="{{ image.alt | default: product.title }}" src="{{ image | img_url: '400x' }}" />
+            </div>
           {% endfor %}
-        </select>
+        </div>
+      </div>
 
-        <button type="submit" class="add-to-cart">Add to Cart</button>
-        <button type="button" class="buy-now">Buy it Now</button>
-      </form>
+      <!-- Product Details Section -->
+      <div class="product-details">
+        <div class="sticky-section">
+          <!-- Product Header -->
+          <div class="product-header">
+            <div class="header-left">
+              <h2>{{ product.handle }}</h2>
+              <h1>{{ product.title }}</h1>
+              <p class="subtitle">{{ product.type }}</p>
+            </div>
+            <div class="header-right">
+              {% if product.compare_at_price %}
+                <p class="original-price">${{ product.compare_at_price }}</p>
+              {% endif %}
+              <p class="sale-price">${{ product.price | money }}</p>
+            </div>
+          </div>
 
-      <div class="product-extra">
-        <p><strong>Shipping:</strong> Free delivery on orders over ₹999</p>
-        <p><strong>Returns:</strong> 7-day easy returns</p>
+          <!-- Color Options -->
+          <div>
+            <div class="color-section">
+              <h3>Core Colours</h3>
+              <div class="color-swatches">
+                <button aria-label="Select Olive Green" class="color-swatch selected" style="background-color: #565C4F;" data-color="Olive Green"></button>
+                <button aria-label="Select Dark Green" class="color-swatch" style="background-color: #3B3F36;" data-color="Dark Green"></button>
+                <button aria-label="Select Two Tone" class="color-swatch color-swatch-split" data-color="Two Tone">
+                  <span class="color-swatch-indicator"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="color-section">
+              <h3>Special Editions</h3>
+              <div class="color-swatches">
+                <button aria-label="Select Burgundy" class="color-swatch" style="background-color: #4A2C36;" data-color="Burgundy"></button>
+                <button aria-label="Select Brown" class="color-swatch" style="background-color: #3E3128;" data-color="Brown">
+                  <span class="color-swatch-indicator"></span>
+                </button>
+                <button aria-label="Select Cream" class="color-swatch" style="background-color: #E5E0D6; border: 1px solid #D1D5DB;" data-color="Cream"></button>
+                <button aria-label="Select Teal" class="color-swatch" style="background-color: #3C5257;" data-color="Teal">
+                  <span class="color-swatch-indicator"></span>
+                </button>
+                <button aria-label="Select Multi" class="color-swatch color-swatch-split-2" data-color="Multi">
+                  <span class="color-swatch-indicator"></span>
+                </button>
+              </div>
+            </div>
+
+            <p class="color-info">
+              Colour: <span class="color-info-value">{{ product.selected_variant.option1 | default: 'Midnight Blue City Plaid' }}</span>
+            </p>
+          </div>
+
+          <!-- Size Selection -->
+          <div class="size-section">
+            <div class="size-header">
+              <h3>Size</h3>
+            </div>
+            <div class="size-options">
+              <button class="size-btn selected" data-size="S">S</button>
+              <button class="size-btn" data-size="M">M</button>
+              <button class="size-btn" data-size="L">L</button>
+              <button class="size-btn" data-size="XL">XL</button>
+              <button class="size-btn" data-size="XXL">XXL</button>
+            </div>
+            <p class="stock-status">Only a Few Left</p>
+            <div class="size-links">
+              <a href="#">Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a>
+              <a href="#">Size guide <span class="material-icons-outlined">arrow_forward</span></a>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <div class="button-row">
+              <button class="add-to-bag-btn">Add to Bag - ${{ product.price | money }}</button>
+              <div class="divider"></div>
+              <button class="wishlist-btn">
+                <span class="material-icons-outlined">favorite_border</span>
+              </button>
+            </div>
+            <p class="eco-message">
+              Every item plants 10 trees <span>🌲</span>
+            </p>
+          </div>
+
+          <!-- Accordion Sections -->
+          <div class="accordion">
+            <div class="product-description">
+              <h3>Meet the product</h3>
+              <p>{{ product.description }}</p>
+            </div>
+
+            <button class="accordion-header">
+              <span class="accordion-title">Details</span>
+              <span class="material-icons-outlined accordion-icon">add</span>
+            </button>
+
+            <button class="accordion-header">
+              <span class="accordion-title">Size &amp; Fit</span>
+              <span class="material-icons-outlined accordion-icon">add</span>
+            </button>
+
+            <button class="accordion-header">
+              <span class="accordion-title">Shipping &amp; Returns</span>
+              <span class="material-icons-outlined accordion-icon">add</span>
+            </button>
+
+            <!-- Pairs With Section -->
+            <div class="pairs-section">
+              <h3>Pairs with</h3>
+              <div class="pairs-grid">
+                {% for product in collections.related_products.products limit: 2 %}
+                  <a class="pair-item" href="{{ product.url }}">
+                    <div class="pair-image">
+                      <img alt="{{ product.title }}" src="{{ product.featured_image | img_url: '150x' }}" />
+                    </div>
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </main>
+
+  <!-- Floating CTA Button -->
+  <div class="floating-cta">
+    <button class="floating-cta-btn">
+      <span class="floating-cta-text-sm">GET</span>
+      <span class="floating-cta-text-lg">15%</span>
+      <span class="floating-cta-text-sm">OFF</span>
+    </button>
   </div>
-</section>
-
-
-<style>
-   .product-page {
-  padding: 60px 20px;
-}
-
-.product-wrapper {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  padding-top: 80px;
-}
-
-.product-image img {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.product-info {
-  flex: 1;
-  max-width: 500px;
-}
-
-.product-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.product-price {
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #1a1a1a;
-  margin-bottom: 20px;
-}
-
-.product-description {
-  line-height: 1.6;
-  color: #444;
-  margin-bottom: 25px;
-}
-
-.product-form select {
-  padding: 10px;
-  width: 100%;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.add-to-cart,
-.buy-now {
-  display: inline-block;
-  padding: 12px 25px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.add-to-cart {
-  background: #1a1a1a;
-  color: #fff;
-}
-
-.buy-now {
-  background: #008060;
-  color: #fff;
-}
-
-.product-extra p {
-  font-size: 0.9rem;
-  color: #555;
-  margin: 8px 0;
-}
-
-</style>
