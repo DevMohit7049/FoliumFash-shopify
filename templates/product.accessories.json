@@ -1,0 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product",
+      "settings": {}
+    },
+    "reward_6JGdzQ": {
+      "type": "reward",
+      "name": "Rewards Banner",
+      "settings": {
+        "heading": "Get Rewarded For Doing Good",
+        "subtext": "Join our Rewards Program to earn points that can be used as cash on future purchases.",
+        "create_account_label": "Create Account",
+        "create_account_link": "",
+        "login_label": "Log in to view points",
+        "login_link": "",
+        "background_color": "#4C5E55",
+        "text_color": "#FFFFFF"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "reward_6JGdzQ"
+  ]
+}
