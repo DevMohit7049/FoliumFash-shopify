@@ -106,43 +106,6 @@
               Every item plants 10 trees <span>🌲</span>
             </p>
           </div>
-
-          <!-- Accordion Sections -->
-          <div class="accordion">
-            <div class="product-description">
-              <h3>Meet the product</h3>
-              <p>{{ product.description }}</p>
-            </div>
-
-            <button class="accordion-header">
-              <span class="accordion-title">Details</span>
-              <span class="material-icons-outlined accordion-icon">add</span>
-            </button>
-
-            <button class="accordion-header">
-              <span class="accordion-title">Size &amp; Fit</span>
-              <span class="material-icons-outlined accordion-icon">add</span>
-            </button>
-
-            <button class="accordion-header">
-              <span class="accordion-title">Shipping &amp; Returns</span>
-              <span class="material-icons-outlined accordion-icon">add</span>
-            </button>
-
-            <!-- Pairs With Section -->
-            <div class="pairs-section">
-              <h3>Pairs with</h3>
-              <div class="pairs-grid">
-                {% for product in collections.related_products.products limit: 2 %}
-                  <a class="pair-item" href="{{ product.url }}">
-                    <div class="pair-image">
-                      <img alt="{{ product.title }}" src="{{ product.featured_image | img_url: '150x' }}" />
-                    </div>
-                  </a>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
