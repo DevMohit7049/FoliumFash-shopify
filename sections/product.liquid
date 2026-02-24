@@ -5,204 +5,309 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 <link href="{{ 'product-page.css' | asset_url }}" rel="stylesheet">
 
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
 <div class="breadcrumb">
-  <span>Home</span>
+  <a href="{{ routes.root_url }}">Home</a>
   <span style="margin: 0 0.25rem;">|</span>
   <span>{{ product.title }}</span>
 </div>
 
 <main class="main-section">
-  <div class="product-grid">
-    <!-- Product Images Section -->
-    <div class="product-images">
-      <div class="image-grid">
-        {% for image in product.images limit: 4 %}
-          <div class="image-container">
-            <img alt="{{ image.alt | default: product.title }}" src="{{ image | img_url: '400x' }}">
-          </div>
-        {% endfor %}
-      </div>
-    </div>
+  {% form 'product', product, id: 'product-form', class: 'product-form' %}
+    <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
 
-    <!-- Product Details Section -->
-    <div class="product-details">
-      <div class="sticky-section">
-        <!-- Product Header -->
-        <div class="product-header">
-          <div class="header-left">
-            <h2>{{ product.handle }}</h2>
-            <h1>{{ product.title }}</h1>
-            <p class="subtitle">{{ product.type }}</p>
+    <div class="product-grid">
+      <!-- Product Images Section -->
+      <div class="product-images">
+        <div class="image-grid" data-product-images>
+          {% for image in product.images limit: 4 %}
+            <div class="image-container{% if image.id == current_variant.featured_image.id %} active{% endif %}" data-image-id="{{ image.id }}">
+              <img alt="{{ image.alt | default: product.title }}" src="{{ image | image_url: width: 400 }}" loading="lazy" width="400" height="">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Product Details Section -->
+      <div class="product-details">
+        <div class="sticky-section">
+          <!-- Product Header -->
+          <div class="product-header">
+            <div class="header-left">
+              <h2>{{ product.vendor | default: product.type }}</h2>
+              <h1>{{ product.title }}</h1>
+              <p class="subtitle">{{ product.type }}</p>
+            </div>
+            <div class="header-right" data-price-wrapper>
+              <p class="original-price" data-compare-at-price {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>
+                {% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money }}{% endif %}
+              </p>
+              <p class="sale-price" data-price>{{ current_variant.price | money }}</p>
+            </div>
           </div>
-          <div class="header-right">
-            {% if product.compare_at_price %}
-              <p class="original-price">${{ product.compare_at_price }}</p>
+
+          <!-- Dynamic Option Selectors (Color, Size, etc.) -->
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              <div class="product-option" data-option-position="{{ option.position }}">
+                <h3 class="option-name">{{ option.name }}</h3>
+                <div class="option-values" role="group" aria-label="{{ option.name }}">
+                  {% for value in option.values %}
+                    {%- assign option_available = false -%}
+                    {% for variant in product.variants %}
+                      {% if option.position == 1 and variant.option1 == value %}
+                        {% if variant.available %}{%- assign option_available = true -%}{% break %}{% endif %}
+                      {% elsif option.position == 2 and variant.option2 == value %}
+                        {% if variant.available %}{%- assign option_available = true -%}{% break %}{% endif %}
+                      {% elsif option.position == 3 and variant.option3 == value %}
+                        {% if variant.available %}{%- assign option_available = true -%}{% break %}{% endif %}
+                      {% endif %}
+                    {% endfor %}
+                    {%- assign is_color = false -%}
+                    {% if option.name == 'Color' or option.name == 'Colour' %}
+                      {%- assign is_color = true -%}
+                      {%- comment %} Optional: use metafield or a mapping for hex; here we use a data attribute for custom styling {% endcomment -%}
+                    {% endif %}
+                    <button
+                      type="button"
+                      class="option-value-btn {% if is_color %}color-swatch{% else %}size-btn{% endif %} {% if option.selected_value == value %}selected{% endif %}"
+                      data-option-position="{{ option.position }}"
+                      data-option-value="{{ value | escape }}"
+                      {% unless option_available %}disabled{% endunless %}
+                      aria-label="{{ option.name }}: {{ value }}{% unless option_available %} (sold out){% endunless %}"
+                      {% if is_color and value contains '#' %}style="background-color: {{ value }}"{% endif %}
+                    >
+                      {% if is_color and value contains '#' %}
+                        <span class="color-swatch-inner"></span>
+                      {% else %}
+                        {{ value }}
+                      {% endif %}
+                    </button>
+                  {% endfor %}
+                </div>
+                <p class="option-selected" data-option-selected="{{ option.position }}">
+                  {{ option.name }}: <span data-option-selected-value>{{ option.selected_value }}</span>
+                </p>
+              </div>
+            {% endfor %}
+          {% endunless %}
+
+          <!-- Quantity (optional) -->
+          <div class="quantity-section">
+            <label for="Quantity-{{ section.id }}">Quantity</label>
+            <input
+              type="number"
+              id="Quantity-{{ section.id }}"
+              name="quantity"
+              value="1"
+              min="1"
+              max="99"
+              class="quantity-input"
+            >
+          </div>
+
+          <!-- Stock status (dynamic) -->
+          <p class="stock-status" data-variant-available>
+            {% if current_variant.available %}
+              {% if current_variant.inventory_management and current_variant.inventory_quantity <= 10 and current_variant.inventory_quantity > 0 %}
+                Only {{ current_variant.inventory_quantity }} left
+              {% else %}
+                In stock
+              {% endif %}
+            {% else %}
+              Sold out
             {% endif %}
-            <p class="sale-price">${{ product.price | money }}</p>
-          </div>
-        </div>
-
-        <!-- Color Options -->
-        <div>
-          <div class="color-section">
-            <h3>Core Colours</h3>
-            <div class="color-swatches">
-              <button
-                aria-label="Select Olive Green"
-                class="color-swatch selected"
-                style="background-color: #565C4F;"
-                data-color="Olive Green"
-              ></button>
-              <button
-                aria-label="Select Dark Green"
-                class="color-swatch"
-                style="background-color: #3B3F36;"
-                data-color="Dark Green"
-              ></button>
-              <button aria-label="Select Two Tone" class="color-swatch color-swatch-split" data-color="Two Tone">
-                <span class="color-swatch-indicator"></span>
-              </button>
-            </div>
-          </div>
-
-          <div class="color-section">
-            <h3>Special Editions</h3>
-            <div class="color-swatches">
-              <button
-                aria-label="Select Burgundy"
-                class="color-swatch"
-                style="background-color: #4A2C36;"
-                data-color="Burgundy"
-              ></button>
-              <button
-                aria-label="Select Brown"
-                class="color-swatch"
-                style="background-color: #3E3128;"
-                data-color="Brown"
-              >
-                <span class="color-swatch-indicator"></span>
-              </button>
-              <button
-                aria-label="Select Cream"
-                class="color-swatch"
-                style="background-color: #E5E0D6; border: 1px solid #D1D5DB;"
-                data-color="Cream"
-              ></button>
-              <button
-                aria-label="Select Teal"
-                class="color-swatch"
-                style="background-color: #3C5257;"
-                data-color="Teal"
-              >
-                <span class="color-swatch-indicator"></span>
-              </button>
-              <button aria-label="Select Multi" class="color-swatch color-swatch-split-2" data-color="Multi">
-                <span class="color-swatch-indicator"></span>
-              </button>
-            </div>
-          </div>
-
-          <p class="color-info">
-            Colour:
-            <span class="color-info-value">
-              {{- product.selected_variant.option1 | default: 'Midnight Blue City Plaid' -}}
-            </span>
           </p>
-        </div>
 
-        <!-- Size Selection -->
-        <div class="size-section">
-          <div class="size-header">
-            <h3>Size</h3>
-          </div>
-          <div class="size-options">
-            <button class="size-btn selected" data-size="S">S</button>
-            <button class="size-btn" data-size="M">M</button>
-            <button class="size-btn" data-size="L">L</button>
-            <button class="size-btn" data-size="XL">XL</button>
-            <button class="size-btn" data-size="XXL">XXL</button>
-          </div>
-          <p class="stock-status">Only a Few Left</p>
           <div class="size-links">
-            <a href="#">Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a>
-            <a href="#">Size guide <span class="material-icons-outlined">arrow_forward</span></a>
+            <a href="{{ routes.root_url }}pages/size-guide" class="size-guide-link">Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a>
+            <a href="{{ routes.root_url }}pages/size-guide" class="size-guide-link">Size guide <span class="material-icons-outlined">arrow_forward</span></a>
           </div>
-        </div>
 
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-          <div class="button-row">
-            <button class="add-to-bag-btn">Add to Bag - ${{ product.price | money }}</button>
-            <div class="divider"></div>
-            <button class="wishlist-btn">
-              <span class="material-icons-outlined">favorite_border</span>
-            </button>
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <div class="button-row">
+              <button
+                type="submit"
+                name="add"
+                class="add-to-bag-btn"
+                data-add-to-bag
+                {% unless current_variant.available %}disabled{% endunless %}
+              >
+                {% if current_variant.available %}
+                  Add to Bag – {{ current_variant.price | money }}
+                {% else %}
+                  Sold out
+                {% endif %}
+              </button>
+              <div class="divider"></div>
+              <button type="button" class="wishlist-btn" aria-label="Add to wishlist">
+                <span class="material-icons-outlined">favorite_border</span>
+              </button>
+            </div>
+            <p class="eco-message">
+              Every item plants 10 trees <span>🌲</span>
+            </p>
           </div>
-          <p class="eco-message">Every item plants 10 trees <span>🌲</span></p>
         </div>
       </div>
     </div>
-  </div>
+  {% endform %}
 </main>
+
+<!-- Variant data for JavaScript -->
+<script type="application/json" id="ProductVariants-{{ section.id }}">
+  [
+    {% for v in product.variants %}
+    {
+      "id": {{ v.id | json }},
+      "option1": {{ v.option1 | json }},
+      "option2": {{ v.option2 | json }},
+      "option3": {{ v.option3 | json }},
+      "available": {{ v.available | json }},
+      "price": {{ v.price | json }},
+      "compare_at_price": {{ v.compare_at_price | json }},
+      "inventory_quantity": {{ v.inventory_quantity | default: 0 | json }},
+      "featured_image_id": {% if v.featured_image %}{{ v.featured_image.id | json }}{% else %}null{% endif %},
+      "featured_image_src": {% if v.featured_image %}{{ v.featured_image | image_url: width: 800 | json }}{% else %}null{% endif %}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+</script>
+
+<script>
+(function() {
+  const sectionId = '{{ section.id }}';
+  const form = document.getElementById('product-form');
+  if (!form) return;
+
+  const variantsData = document.getElementById('ProductVariants-' + sectionId);
+  const variants = variantsData ? JSON.parse(variantsData.textContent) : [];
+
+  const variantInput = form.querySelector('[data-variant-id]');
+  const priceEl = form.querySelector('[data-price]');
+  const compareAtPriceEl = form.querySelector('[data-compare-at-price]');
+  const priceWrapper = form.querySelector('[data-price-wrapper]');
+  const addToBagBtn = form.querySelector('[data-add-to-bag]');
+  const variantAvailableEl = form.querySelector('[data-variant-available]');
+  const optionButtons = form.querySelectorAll('[data-option-position][data-option-value]');
+  const imageContainers = form.querySelectorAll('[data-image-id]');
+
+  function getSelectedOptions() {
+    const selected = {};
+    optionButtons.forEach(function(btn) {
+      if (btn.classList.contains('selected')) {
+        selected[parseInt(btn.dataset.optionPosition, 10)] = btn.dataset.optionValue;
+      }
+    });
+    return selected;
+  }
+
+  function findVariant(selected) {
+    return variants.find(function(v) {
+      return (v.option1 || null) === (selected[1] || null) &&
+             (v.option2 || null) === (selected[2] || null) &&
+             (v.option3 || null) === (selected[3] || null);
+    });
+  }
+
+  function formatMoney(cents) {
+    return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: '{{ cart.currency.iso_code }}' });
+  }
+
+  function updateUI(variant) {
+    if (!variant) return;
+
+    variantInput.value = variant.id;
+
+    if (priceEl) {
+      priceEl.textContent = formatMoney(variant.price);
+    }
+    if (compareAtPriceEl) {
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        compareAtPriceEl.textContent = formatMoney(variant.compare_at_price);
+        compareAtPriceEl.hidden = false;
+      } else {
+        compareAtPriceEl.hidden = true;
+      }
+    }
+
+    if (addToBagBtn) {
+      addToBagBtn.disabled = !variant.available;
+      addToBagBtn.textContent = variant.available ? 'Add to Bag – ' + formatMoney(variant.price) : 'Sold out';
+    }
+
+    if (variantAvailableEl) {
+      if (variant.available) {
+        if (variant.inventory_quantity != null && variant.inventory_quantity <= 10 && variant.inventory_quantity > 0) {
+          variantAvailableEl.textContent = 'Only ' + variant.inventory_quantity + ' left';
+        } else {
+          variantAvailableEl.textContent = 'In stock';
+        }
+      } else {
+        variantAvailableEl.textContent = 'Sold out';
+      }
+    }
+
+    // Update selected option labels
+    form.querySelectorAll('[data-option-selected-value]').forEach(function(span) {
+      const optionBlock = span.closest('[data-option-selected]');
+      if (!optionBlock) return;
+      const pos = parseInt(optionBlock.dataset.optionSelected, 10);
+      const val = variant['option' + pos];
+      if (val) span.textContent = val;
+    });
+
+    // Switch active image if variant has a featured image
+    if (variant.featured_image_id && imageContainers.length) {
+      imageContainers.forEach(function(container) {
+        if (parseInt(container.dataset.imageId, 10) === variant.featured_image_id) {
+          container.classList.add('active');
+          var img = container.querySelector('img');
+          if (img && variant.featured_image_src) img.src = variant.featured_image_src;
+        } else {
+          container.classList.remove('active');
+        }
+      });
+    }
+  }
+
+  optionButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.disabled) return;
+      var position = parseInt(btn.dataset.optionPosition, 10);
+      form.querySelectorAll('button[data-option-position="' + position + '"]').forEach(function(b) {
+        b.classList.remove('selected');
+      });
+      btn.classList.add('selected');
+      var selected = getSelectedOptions();
+      var variant = findVariant(selected);
+      if (variant) updateUI(variant);
+    });
+  });
+
+  // Initialize: ensure first available variant options are marked selected (Liquid may have set selected_value)
+  var selected = getSelectedOptions();
+  var current = findVariant(selected) || variants[0];
+  if (current) updateUI(current);
+})();
+</script>
 
 <!-- Floating CTA Button -->
 <div class="floating-cta">
-  <button class="floating-cta-btn">
+  <button type="button" class="floating-cta-btn">
     <span class="floating-cta-text-sm">GET</span>
     <span class="floating-cta-text-lg">15%</span>
     <span class="floating-cta-text-sm">OFF</span>
   </button>
 </div>
 
-<script>
-  var productData = {{ product | json }}
-  console.log("product data===>",productData);
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let selectedColor = null;
-    let selectedSize = null;
-
-    const priceElement = document.querySelector('.sale-price');
-    const imagesContainer = document.querySelector('.image-grid');
-
-    // COLOR CLICK
-    document.querySelectorAll('.color-swatch').forEach((btn) => {
-      btn.addEventListener('click', function () {
-        selectedColor = this.dataset.color;
-        updateVariant();
-      });
-    });
-
-    // SIZE CLICK
-    document.querySelectorAll('.size-btn').forEach((btn) => {
-      btn.addEventListener('click', function () {
-        selectedSize = this.dataset.size;
-        updateVariant();
-      });
-    });
-
-    function updateVariant() {
-      if (!selectedColor || !selectedSize) return;
-
-      const matchedVariant = productData.variants.find(
-        (variant) => variant.option1 === selectedColor && variant.option2 === selectedSize
-      );
-
-      if (matchedVariant) {
-        // Update price
-        priceElement.innerHTML = Shopify.formatMoney(matchedVariant.price);
-
-        // Update images
-        if (matchedVariant.featured_image) {
-          imagesContainer.innerHTML = `
-          <div class="image-container">
-            <img src="${matchedVariant.featured_image.src}" width="400" />
-          </div>
-        `;
-        }
-      }
-    }
-  });
-</script>
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "product-section",
+  "settings": []
+}
+{% endschema %}

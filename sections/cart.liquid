@@ -1,37 +1,170 @@
 {% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
-
+  Cart page section – clean, spacious layout with line-item cards and summary.
   https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
 {% endcomment %}
 
-<h1>{{ 'cart.title' | t }}</h1>
+{{ 'cart.css' | asset_url | stylesheet_tag }}
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+<div class="cart-page" data-cart-page>
+  <div class="cart-page__inner">
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+    <header class="cart-header">
+      <h1 class="cart-title">{{ 'cart.title' | t }}</h1>
+      {% if cart.item_count > 0 %}
+        <p class="cart-count">{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</p>
+      {% endif %}
+    </header>
+
+    {% if cart.item_count == 0 %}
+      <div class="cart-empty">
+        <div class="cart-empty__icon" aria-hidden="true">🛒</div>
+        <h2 class="cart-empty__title">Your cart is empty</h2>
+        <p class="cart-empty__text">Looks like you haven’t added anything yet.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="cart-empty__button">Continue shopping</a>
+      </div>
+    {% else %}
+      <form action="{{ routes.cart_url }}" method="post" class="cart-form" id="cart-form" data-currency="{{ cart.currency.iso_code }}">
+        <div class="cart-layout">
+          <!-- Line items -->
+          <div class="cart-items">
+            {% for item in cart.items %}
+              <div class="cart-item" data-line-key="{{ item.key }}" data-line-index="{{ forloop.index }}">
+                <a href="{{ item.url }}" class="cart-item__image-wrap" aria-label="{{ item.product.title }}">
+                  {% if item.image %}
+                    <img
+                      src="{{ item.image | image_url: width: 280 }}"
+                      alt="{{ item.image.alt | default: item.product.title }}"
+                      width="140"
+                      height="140"
+                      loading="lazy"
+                      class="cart-item__image"
+                    >
+                  {% else %}
+                    <div class="cart-item__image cart-item__image--placeholder" aria-hidden="true">
+                      {{ 'product-1' | placeholder_svg_tag: 'cart-item__placeholder-svg' }}
+                    </div>
+                  {% endif %}
+                </a>
+                <div class="cart-item__details">
+                  <a href="{{ item.url }}" class="cart-item__title">{{ item.product.title }}</a>
+                  {% unless item.variant.title == 'Default Title' %}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {% endunless %}
+                  <div class="cart-item__price-row">
+                    <span class="cart-item__price">{{ item.final_line_price | money }}</span>
+                    {% if item.original_line_price != item.final_line_price %}
+                      <span class="cart-item__price-original">{{ item.original_line_price | money }}</span>
+                    {% endif %}
+                  </div>
+                  <div class="cart-item__actions">
+                    <div class="cart-item__quantity">
+                      <label for="updates-{{ item.key }}" class="visually-hidden">Quantity for {{ item.product.title }}</label>
+                      <input
+                        type="number"
+                        id="updates-{{ item.key }}"
+                        name="updates[]"
+                        value="{{ item.quantity }}"
+                        min="1"
+                        max="99"
+                        class="cart-item__quantity-input"
+                        data-quantity-input
+                        data-line-index="{{ forloop.index }}"
+                      >
+                    </div>
+                    <a href="{{ item.url_to_remove }}" class="cart-item__remove" aria-label="Remove {{ item.product.title }} from cart">
+                      {{ 'cart.remove' | t }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Summary sidebar -->
+          <aside class="cart-summary">
+            <div class="cart-summary__box">
+              <h2 class="cart-summary__title">Order summary</h2>
+              <div class="cart-summary__row">
+                <span>Subtotal</span>
+                <span class="cart-summary__subtotal" data-cart-subtotal>{{ cart.total_price | money }}</span>
+              </div>
+              <p class="cart-summary__note">Shipping and taxes calculated at checkout.</p>
+              <button type="submit" name="checkout" class="cart-summary__checkout">
+                {{ 'cart.checkout' | t }}
+              </button>
+              <button type="submit" name="update" class="cart-summary__update">
+                {{ 'cart.update' | t }}
+              </button>
+              <a href="{{ routes.all_products_collection_url }}" class="cart-summary__continue">Continue shopping</a>
+            </div>
+          </aside>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('cart-form');
+  if (!form) return;
+
+  const subtotalEl = form.querySelector('[data-cart-subtotal]');
+  const quantityInputs = form.querySelectorAll('[data-quantity-input]');
+  const currencyFallback = form.dataset.currency || 'USD';
+
+  function formatMoney(cents, currency) {
+    return new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency: currency || currencyFallback
+    }).format((cents / 100));
+  }
+
+  function updateSubtotal(cart) {
+    if (subtotalEl && cart && typeof cart.total_price === 'number') {
+      subtotalEl.textContent = formatMoney(cart.total_price, cart.currency || currencyFallback);
+    }
+  }
+
+  function getCartChangeUrl() {
+    var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    return root.replace(/\/$/, '') + '/cart/change.js';
+  }
+
+  quantityInputs.forEach(function(input) {
+    input.addEventListener('change', function() {
+      var lineIndex = parseInt(input.dataset.lineIndex, 10);
+      var quantity = parseInt(input.value, 10) || 1;
+
+      if (quantity < 1) {
+        input.value = 1;
+        quantity = 1;
+      }
+
+      fetch(getCartChangeUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line: lineIndex, quantity: quantity })
+      })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (typeof data.total_price === 'number') {
+            updateSubtotal(data);
+          }
+        })
+        .catch(function() {
+          form.submit();
+        });
+    });
+  });
+})();
+</script>
 
 {% schema %}
 {
   "name": "t:general.cart",
+  "tag": "section",
+  "class": "cart-section",
   "settings": []
 }
 {% endschema %}

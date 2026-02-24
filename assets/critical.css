@@ -73,9 +73,18 @@ p:empty {
 
 /** Theme styles below */
 body {
-  font-family: var(--font-primary--family);
+  font-family: 'DM Sans', var(--font-primary--family), system-ui, sans-serif;
   background-color: var(--color-background);
   color: var(--color-foreground);
+}
+
+/** Global links – no underline, subtle hover */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+a:hover {
+  opacity: 0.85;
 }
 
 /** Section layout utilities */

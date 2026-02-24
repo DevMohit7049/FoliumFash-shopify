@@ -1,61 +1,112 @@
 {% comment %}
-  This section is used in the list-collections template to render a list of
-  collections.
-
+  List collections page – minimalist grid
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<section class="collections-page section-spacing page-section">
+  <div class="page-width">
+    <h1 class="page-title page-title--large">{{ 'collections.title' | t }}</h1>
 
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
-      {% endif %}
+    <div
+      class="collections-grid {{ section.settings.grid_item_width }}"
+      style="--grid-gap: {{ section.settings.grid_gap }}px"
+    >
+      {% for collection in collections %}
+        <a href="{{ collection.url }}" class="collection-card">
+          {% if collection.featured_image %}
+            <img
+              src="{{ collection.featured_image | image_url: width: 600 }}"
+              alt="{{ collection.featured_image.alt | default: collection.title }}"
+              width="300"
+              height="300"
+              loading="lazy"
+              class="collection-card__img"
+            >
+          {% else %}
+            <div class="collection-card__placeholder">{{ 'collection-1' | placeholder_svg_tag: 'placeholder' }}</div>
+          {% endif %}
+          <div class="collection-card__content">
+            <h2 class="collection-card__title">{{ collection.title }}</h2>
+            {% if collection.description != blank %}
+              <p class="collection-card__desc page-text">{{ collection.description | strip_html | truncatewords: 15 }}</p>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
+<style>
+.collections-page {
+  background: #fff;
+}
 
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
-        {% endif %}
-      </div>
-    </a>
-  {% endfor %}
-</div>
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size, 260px), 100%), 1fr));
+  gap: var(--grid-gap, 1.5rem);
+}
 
-{% stylesheet %}
-  .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
-  }
-  .collections--compact {
-    --collection-card-size: 160px;
-  }
-  .collections--full {
-    --collection-card-size: 280px;
-  }
-  .collection-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-{% endstylesheet %}
+.collections-grid.collections--compact {
+  --collection-card-size: 180px;
+}
+
+.collections-grid.collections--full {
+  --collection-card-size: 280px;
+}
+
+.collection-card {
+  display: block;
+  color: inherit;
+}
+
+.collection-card:hover {
+  opacity: 0.9;
+}
+
+.collection-card__img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.collection-card__placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collection-card__placeholder svg {
+  width: 40%;
+  opacity: 0.4;
+}
+
+.collection-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+}
+
+.collection-card__desc {
+  font-size: 0.875rem;
+  margin: 0;
+}
+</style>
 
 {% schema %}
 {
   "name": "t:general.collections_grid",
+  "tag": "section",
+  "class": "collections-section",
   "settings": [
     {
       "type": "select",
@@ -75,7 +126,7 @@
       "max": 50,
       "step": 5,
       "unit": "px",
-      "default": 10
+      "default": 24
     }
   ],
   "presets": [{ "name": "t:general.collections_grid" }]
