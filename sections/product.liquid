@@ -1,126 +1,208 @@
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
-<link href="{{ 'product-page.css' | asset_url }}" rel="stylesheet"/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+  rel="stylesheet"
+>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<link href="{{ 'product-page.css' | asset_url }}" rel="stylesheet">
 
 <div class="breadcrumb">
-    <span>Home</span>
-    <span style="margin: 0 0.25rem;">|</span>
-    <span>{{ product.title }}</span>
+  <span>Home</span>
+  <span style="margin: 0 0.25rem;">|</span>
+  <span>{{ product.title }}</span>
 </div>
 
-  <main class=main-section>
-    <div class="product-grid">
-      <!-- Product Images Section -->
-      <div class="product-images">
-        <div class="image-grid">
-          {% for image in product.images limit: 4 %}
-            <div class="image-container">
-              <img alt="{{ image.alt | default: product.title }}" src="{{ image | img_url: '400x' }}" />
-            </div>
-          {% endfor %}
-        </div>
+<main class="main-section">
+  <div class="product-grid">
+    <!-- Product Images Section -->
+    <div class="product-images">
+      <div class="image-grid">
+        {% for image in product.images limit: 4 %}
+          <div class="image-container">
+            <img alt="{{ image.alt | default: product.title }}" src="{{ image | img_url: '400x' }}">
+          </div>
+        {% endfor %}
       </div>
+    </div>
 
-      <!-- Product Details Section -->
-      <div class="product-details">
-        <div class="sticky-section">
-          <!-- Product Header -->
-          <div class="product-header">
-            <div class="header-left">
-              <h2>{{ product.handle }}</h2>
-              <h1>{{ product.title }}</h1>
-              <p class="subtitle">{{ product.type }}</p>
-            </div>
-            <div class="header-right">
-              {% if product.compare_at_price %}
-                <p class="original-price">${{ product.compare_at_price }}</p>
-              {% endif %}
-              <p class="sale-price">${{ product.price | money }}</p>
-            </div>
+    <!-- Product Details Section -->
+    <div class="product-details">
+      <div class="sticky-section">
+        <!-- Product Header -->
+        <div class="product-header">
+          <div class="header-left">
+            <h2>{{ product.handle }}</h2>
+            <h1>{{ product.title }}</h1>
+            <p class="subtitle">{{ product.type }}</p>
           </div>
-
-          <!-- Color Options -->
-          <div>
-            <div class="color-section">
-              <h3>Core Colours</h3>
-              <div class="color-swatches">
-                <button aria-label="Select Olive Green" class="color-swatch selected" style="background-color: #565C4F;" data-color="Olive Green"></button>
-                <button aria-label="Select Dark Green" class="color-swatch" style="background-color: #3B3F36;" data-color="Dark Green"></button>
-                <button aria-label="Select Two Tone" class="color-swatch color-swatch-split" data-color="Two Tone">
-                  <span class="color-swatch-indicator"></span>
-                </button>
-              </div>
-            </div>
-
-            <div class="color-section">
-              <h3>Special Editions</h3>
-              <div class="color-swatches">
-                <button aria-label="Select Burgundy" class="color-swatch" style="background-color: #4A2C36;" data-color="Burgundy"></button>
-                <button aria-label="Select Brown" class="color-swatch" style="background-color: #3E3128;" data-color="Brown">
-                  <span class="color-swatch-indicator"></span>
-                </button>
-                <button aria-label="Select Cream" class="color-swatch" style="background-color: #E5E0D6; border: 1px solid #D1D5DB;" data-color="Cream"></button>
-                <button aria-label="Select Teal" class="color-swatch" style="background-color: #3C5257;" data-color="Teal">
-                  <span class="color-swatch-indicator"></span>
-                </button>
-                <button aria-label="Select Multi" class="color-swatch color-swatch-split-2" data-color="Multi">
-                  <span class="color-swatch-indicator"></span>
-                </button>
-              </div>
-            </div>
-
-            <p class="color-info">
-              Colour: <span class="color-info-value">{{ product.selected_variant.option1 | default: 'Midnight Blue City Plaid' }}</span>
-            </p>
+          <div class="header-right">
+            {% if product.compare_at_price %}
+              <p class="original-price">${{ product.compare_at_price }}</p>
+            {% endif %}
+            <p class="sale-price">${{ product.price | money }}</p>
           </div>
+        </div>
 
-          <!-- Size Selection -->
-          <div class="size-section">
-            <div class="size-header">
-              <h3>Size</h3>
-            </div>
-            <div class="size-options">
-              <button class="size-btn selected" data-size="S">S</button>
-              <button class="size-btn" data-size="M">M</button>
-              <button class="size-btn" data-size="L">L</button>
-              <button class="size-btn" data-size="XL">XL</button>
-              <button class="size-btn" data-size="XXL">XXL</button>
-            </div>
-            <p class="stock-status">Only a Few Left</p>
-            <div class="size-links">
-              <a href="#">Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a>
-              <a href="#">Size guide <span class="material-icons-outlined">arrow_forward</span></a>
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="action-buttons">
-            <div class="button-row">
-              <button class="add-to-bag-btn">Add to Bag - ${{ product.price | money }}</button>
-              <div class="divider"></div>
-              <button class="wishlist-btn">
-                <span class="material-icons-outlined">favorite_border</span>
+        <!-- Color Options -->
+        <div>
+          <div class="color-section">
+            <h3>Core Colours</h3>
+            <div class="color-swatches">
+              <button
+                aria-label="Select Olive Green"
+                class="color-swatch selected"
+                style="background-color: #565C4F;"
+                data-color="Olive Green"
+              ></button>
+              <button
+                aria-label="Select Dark Green"
+                class="color-swatch"
+                style="background-color: #3B3F36;"
+                data-color="Dark Green"
+              ></button>
+              <button aria-label="Select Two Tone" class="color-swatch color-swatch-split" data-color="Two Tone">
+                <span class="color-swatch-indicator"></span>
               </button>
             </div>
-            <p class="eco-message">
-              Every item plants 10 trees <span>🌲</span>
-            </p>
           </div>
+
+          <div class="color-section">
+            <h3>Special Editions</h3>
+            <div class="color-swatches">
+              <button
+                aria-label="Select Burgundy"
+                class="color-swatch"
+                style="background-color: #4A2C36;"
+                data-color="Burgundy"
+              ></button>
+              <button
+                aria-label="Select Brown"
+                class="color-swatch"
+                style="background-color: #3E3128;"
+                data-color="Brown"
+              >
+                <span class="color-swatch-indicator"></span>
+              </button>
+              <button
+                aria-label="Select Cream"
+                class="color-swatch"
+                style="background-color: #E5E0D6; border: 1px solid #D1D5DB;"
+                data-color="Cream"
+              ></button>
+              <button
+                aria-label="Select Teal"
+                class="color-swatch"
+                style="background-color: #3C5257;"
+                data-color="Teal"
+              >
+                <span class="color-swatch-indicator"></span>
+              </button>
+              <button aria-label="Select Multi" class="color-swatch color-swatch-split-2" data-color="Multi">
+                <span class="color-swatch-indicator"></span>
+              </button>
+            </div>
+          </div>
+
+          <p class="color-info">
+            Colour:
+            <span class="color-info-value">
+              {{- product.selected_variant.option1 | default: 'Midnight Blue City Plaid' -}}
+            </span>
+          </p>
+        </div>
+
+        <!-- Size Selection -->
+        <div class="size-section">
+          <div class="size-header">
+            <h3>Size</h3>
+          </div>
+          <div class="size-options">
+            <button class="size-btn selected" data-size="S">S</button>
+            <button class="size-btn" data-size="M">M</button>
+            <button class="size-btn" data-size="L">L</button>
+            <button class="size-btn" data-size="XL">XL</button>
+            <button class="size-btn" data-size="XXL">XXL</button>
+          </div>
+          <p class="stock-status">Only a Few Left</p>
+          <div class="size-links">
+            <a href="#">Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a>
+            <a href="#">Size guide <span class="material-icons-outlined">arrow_forward</span></a>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <div class="button-row">
+            <button class="add-to-bag-btn">Add to Bag - ${{ product.price | money }}</button>
+            <div class="divider"></div>
+            <button class="wishlist-btn">
+              <span class="material-icons-outlined">favorite_border</span>
+            </button>
+          </div>
+          <p class="eco-message">Every item plants 10 trees <span>🌲</span></p>
         </div>
       </div>
     </div>
-  </main>
-
-  <!-- Floating CTA Button -->
-  <div class="floating-cta">
-    <button class="floating-cta-btn">
-      <span class="floating-cta-text-sm">GET</span>
-      <span class="floating-cta-text-lg">15%</span>
-      <span class="floating-cta-text-sm">OFF</span>
-    </button>
   </div>
+</main>
 
-  <script>
-      var productData = {{ product | json }}
-      console.log("product data===>",productData);
-  </script>
+<!-- Floating CTA Button -->
+<div class="floating-cta">
+  <button class="floating-cta-btn">
+    <span class="floating-cta-text-sm">GET</span>
+    <span class="floating-cta-text-lg">15%</span>
+    <span class="floating-cta-text-sm">OFF</span>
+  </button>
+</div>
+
+<script>
+  var productData = {{ product | json }}
+  console.log("product data===>",productData);
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let selectedColor = null;
+    let selectedSize = null;
+
+    const priceElement = document.querySelector('.sale-price');
+    const imagesContainer = document.querySelector('.image-grid');
+
+    // COLOR CLICK
+    document.querySelectorAll('.color-swatch').forEach((btn) => {
+      btn.addEventListener('click', function () {
+        selectedColor = this.dataset.color;
+        updateVariant();
+      });
+    });
+
+    // SIZE CLICK
+    document.querySelectorAll('.size-btn').forEach((btn) => {
+      btn.addEventListener('click', function () {
+        selectedSize = this.dataset.size;
+        updateVariant();
+      });
+    });
+
+    function updateVariant() {
+      if (!selectedColor || !selectedSize) return;
+
+      const matchedVariant = productData.variants.find(
+        (variant) => variant.option1 === selectedColor && variant.option2 === selectedSize
+      );
+
+      if (matchedVariant) {
+        // Update price
+        priceElement.innerHTML = Shopify.formatMoney(matchedVariant.price);
+
+        // Update images
+        if (matchedVariant.featured_image) {
+          imagesContainer.innerHTML = `
+          <div class="image-container">
+            <img src="${matchedVariant.featured_image.src}" width="400" />
+          </div>
+        `;
+        }
+      }
+    }
+  });
+</script>
