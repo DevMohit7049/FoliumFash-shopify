@@ -13,6 +13,13 @@
       "type": "product",
       "settings": {}
     },
+    "new_arrival_kg7xB7": {
+      "type": "new-arrival",
+      "name": "New Arrival Tabs",
+      "settings": {
+        "arrival_heading": "New Arrival"
+      }
+    },
     "reward_6JGdzQ": {
       "type": "reward",
       "name": "Rewards Banner",
@@ -23,13 +30,14 @@
         "create_account_link": "",
         "login_label": "Log in to view points",
         "login_link": "",
-        "background_color": "#4C5E55",
-        "text_color": "#FFFFFF"
+        "background_color": "#4c5e55",
+        "text_color": "#ffffff"
       }
     }
   },
   "order": [
     "main",
+    "new_arrival_kg7xB7",
     "reward_6JGdzQ"
   ]
 }
