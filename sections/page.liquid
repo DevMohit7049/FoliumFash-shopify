@@ -1,17 +1,48 @@
 {% comment %}
-  This section is used in the page template to render store pages like About us
-  or Contact us.
-
+  Page template – minimalist content (About, Contact, etc.)
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
+<section class="template-page section-spacing page-section">
+  <div class="page-width">
+    <header class="page-header">
+      <h1 class="page-title page-title--large">{{ page.title }}</h1>
+    </header>
+    <div class="page-content rte">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
 
-{{ page.content }}
+<style>
+.template-page {
+  background: #fff;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.page-content {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+.page-content a {
+  color: #4a5d52;
+}
+
+.page-content a:hover {
+  opacity: 0.85;
+}
+</style>
 
 {% schema %}
 {
   "name": "t:general.page",
+  "tag": "section",
+  "class": "page-section",
   "settings": []
 }
 {% endschema %}

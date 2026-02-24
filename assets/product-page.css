@@ -51,6 +51,15 @@ body.dark-mode {
   gap: 0.25rem;
 }
 
+.breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  opacity: 0.85;
+}
+
 body.dark-mode .breadcrumb {
   color: var(--color-text-muted-dark);
 }
@@ -384,6 +393,76 @@ body.dark-mode .size-btn:hover:not(.selected) {
   transform: scale(0.95);
 }
 
+/* Product option blocks (Color, Size, etc.) */
+.product-option {
+  margin-bottom: 1.5rem;
+}
+
+.option-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.option-values {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.option-value-btn {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option-value-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.option-selected {
+  font-size: 0.875rem;
+  color: var(--color-text-muted-light);
+  margin-top: 0.5rem;
+}
+
+body.dark-mode .option-selected {
+  color: var(--color-text-muted-dark);
+}
+
+/* Quantity */
+.quantity-section {
+  margin-top: 1rem;
+}
+
+.quantity-section label {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.quantity-input {
+  width: 5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  background: var(--color-surface-light);
+  color: var(--color-text-main-light);
+}
+
+body.dark-mode .quantity-input {
+  border-color: var(--color-border-dark);
+  background: var(--color-surface-dark);
+  color: var(--color-text-main-dark);
+}
+
+/* Active product image */
+.image-container.active {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .stock-status {
   font-size: 0.875rem;
   font-weight: 500;
@@ -395,7 +474,6 @@ body.dark-mode .size-btn:hover:not(.selected) {
   display: flex;
   gap: 1.5rem;
   font-size: 0.875rem;
-  text-decoration: underline;
   color: var(--color-text-muted-light);
   padding-top: 0.5rem;
   margin-top: 0.5rem;
@@ -407,7 +485,6 @@ body.dark-mode .size-links {
 
 .size-links a {
   color: inherit;
-  text-decoration: underline;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -455,8 +532,13 @@ body.dark-mode .size-links a:hover {
   transition: background-color 0.3s ease;
 }
 
-.add-to-bag-btn:hover {
+.add-to-bag-btn:hover:not(:disabled) {
   background-color: rgba(85, 107, 93, 0.9);
+}
+
+.add-to-bag-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .divider {

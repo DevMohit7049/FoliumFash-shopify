@@ -1,9 +1,9 @@
 .site-footer {
   background-color: #f8f8f5;
   color: #444;
-  border-top: 1px solid #ddd;
-  font-family: Arial, sans-serif;
-  padding-top: 50px;
+  border-top: 1px solid #e8e8e8;
+  font-family: inherit;
+  padding-top: 3rem;
 }
 
 .footer-container {

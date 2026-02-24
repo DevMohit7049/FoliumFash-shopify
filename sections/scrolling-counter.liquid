@@ -1,54 +1,38 @@
-<section class="scrolling-text">
-  <div class="scrolling-text-container">
-    <p class="scrolling-text-content">{{ section.settings.scroll_text }}</p>
+<section class="scrolling-text" aria-hidden="true">
+  <div class="scrolling-text__track">
+    <span class="scrolling-text__content">{{ section.settings.scroll_text }}</span>
+    <span class="scrolling-text__content" aria-hidden="true">{{ section.settings.scroll_text }}</span>
   </div>
 </section>
 
 <style>
-/* ==============================
-   Scrolling Text Section
-   ============================== */
 .scrolling-text {
-  background-color: #2e3b2b; /* Dark background like Tentree */
-  padding: 20px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: #3d4a40;
+  padding: 1rem 0;
   overflow: hidden;
 }
 
-.scrolling-text-container {
+.scrolling-text__track {
   display: flex;
-  justify-content: flex-start;
-  animation: slideText 20s linear infinite;
+  gap: 3rem;
+  animation: scrollText 35s linear infinite;
+  white-space: nowrap;
 }
 
-.scrolling-text-content {
-  color: #fff;
-  font-size: 1.4rem;
-  font-weight: 600;
+.scrolling-text__content {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  padding-right: 50px; /* Space between repeating text */
+  color: rgba(255,255,255,0.9);
 }
 
-@keyframes slideText {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+@keyframes scrollText {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 </style>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const textContainer = document.querySelector('.scrolling-text-container');
-  const contentWidth = textContainer.scrollWidth;
-  
-  textContainer.style.animationDuration = `${contentWidth / 50}s`; // Adjust speed based on text length
-});
-</script>
 
 {% schema %}
 {
