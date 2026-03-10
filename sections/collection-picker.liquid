@@ -1,4 +1,6 @@
 
+{% assign collection = section.settings.collection %}
+
 <div class="page-width"> 
 {% for product in collections['womens'].products %}
    {{ product.featured_image | image_url:'master' | img_tag }}
@@ -11,7 +13,6 @@
  {
   "name":"collection picker",
    "settings":[
-     
       {
         "type":"collection",
          "id":"collection",
