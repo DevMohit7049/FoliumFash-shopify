@@ -1,6 +1,7 @@
 
 {% assign collection = section.settings.collection %}
 {% assign selected_collection = collections[collection] %}
+
 <div class="page-width"> 
 {% for product in selected_collection.products %}
    {{ product.featured_image | image_url:'master' | img_tag }}
