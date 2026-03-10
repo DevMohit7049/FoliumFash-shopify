@@ -144,8 +144,8 @@
         "create_account_link": "",
         "login_label": "Log in to view points",
         "login_link": "",
-        "background_color": "#4C5E55",
-        "text_color": "#FFFFFF"
+        "background_color": "#4c5e55",
+        "text_color": "#ffffff"
       }
     }
   },
