@@ -1,8 +1,8 @@
 
 {% assign collection = section.settings.collection %}
-
+{% assign selected_collection = collections[collection] %}
 <div class="page-width"> 
-{% for product in collections[collection].products %}
+{% for product in selected_collection.products %}
    {{ product.featured_image | image_url:'master' | img_tag }}
    {{ product.price | money }}
    {{ product.compare_at_price | money }}
