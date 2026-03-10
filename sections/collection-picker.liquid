@@ -1,5 +1,8 @@
+
+<div class="page-width"> 
 {% for product in collections['womens'].products %}
    {{ product.featured_image | image_url:'master' | img_tag }}
    {{ product.price | money }}
    {{ product.compare_at_price | money }}
 {% endfor %}
+</div>
