@@ -22,8 +22,17 @@
       <div class="product-images">
         <div class="image-grid" data-product-images>
           {% for image in product.images limit: 4 %}
-            <div class="image-container{% if image.id == current_variant.featured_image.id %} active{% endif %}" data-image-id="{{ image.id }}">
-              <img alt="{{ image.alt | default: product.title }}" src="{{ image | image_url: width: 400 }}" loading="lazy" width="400" height="">
+            <div
+              class="image-container{% if image.id == current_variant.featured_image.id %} active{% endif %}"
+              data-image-id="{{ image.id }}"
+            >
+              <img
+                alt="{{ image.alt | default: product.title }}"
+                src="{{ image | image_url: width: 400 }}"
+                loading="lazy"
+                width="400"
+                height=""
+              >
             </div>
           {% endfor %}
         </div>
@@ -40,8 +49,16 @@
               <p class="subtitle">{{ product.type }}</p>
             </div>
             <div class="header-right" data-price-wrapper>
-              <p class="original-price" data-compare-at-price {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>
-                {% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money }}{% endif %}
+              <p
+                class="original-price"
+                data-compare-at-price
+                {% unless current_variant.compare_at_price > current_variant.price %}
+                  hidden
+                {% endunless %}
+              >
+                {% if current_variant.compare_at_price > current_variant.price -%}
+                  {{- current_variant.compare_at_price | money -}}
+                {%- endif %}
               </p>
               <p class="sale-price" data-price>{{ current_variant.price | money }}</p>
             </div>
@@ -57,26 +74,39 @@
                     {%- assign option_available = false -%}
                     {% for variant in product.variants %}
                       {% if option.position == 1 and variant.option1 == value %}
-                        {% if variant.available %}{%- assign option_available = true -%}{% break %}{% endif %}
+                        {% if variant.available %}
+                          {%- assign option_available = true -%}
+                          {% break -%}
+                        {%- endif %}
                       {% elsif option.position == 2 and variant.option2 == value %}
-                        {% if variant.available %}{%- assign option_available = true -%}{% break %}{% endif %}
+                        {% if variant.available %}
+                          {%- assign option_available = true -%}
+                          {% break -%}
+                        {%- endif %}
                       {% elsif option.position == 3 and variant.option3 == value %}
-                        {% if variant.available %}{%- assign option_available = true -%}{% break %}{% endif %}
+                        {% if variant.available %}
+                          {%- assign option_available = true -%}
+                          {% break -%}
+                        {%- endif %}
                       {% endif %}
                     {% endfor %}
                     {%- assign is_color = false -%}
                     {% if option.name == 'Color' or option.name == 'Colour' %}
                       {%- assign is_color = true -%}
-                      {%- comment %} Optional: use metafield or a mapping for hex; here we use a data attribute for custom styling {% endcomment -%}
+                      {%- comment %} Optional: use metafield or a mapping for hex; here we use a data attribute for custom styling {%- endcomment %}
                     {% endif %}
                     <button
                       type="button"
                       class="option-value-btn {% if is_color %}color-swatch{% else %}size-btn{% endif %} {% if option.selected_value == value %}selected{% endif %}"
                       data-option-position="{{ option.position }}"
                       data-option-value="{{ value | escape }}"
-                      {% unless option_available %}disabled{% endunless %}
+                      {% unless option_available %}
+                        disabled
+                      {% endunless %}
                       aria-label="{{ option.name }}: {{ value }}{% unless option_available %} (sold out){% endunless %}"
-                      {% if is_color and value contains '#' %}style="background-color: {{ value }}"{% endif %}
+                      {% if is_color and value contains '#' %}
+                        style="background-color: {{ value }}"
+                      {% endif %}
                     >
                       {% if is_color and value contains '#' %}
                         <span class="color-swatch-inner"></span>
@@ -110,7 +140,10 @@
           <!-- Stock status (dynamic) -->
           <p class="stock-status" data-variant-available>
             {% if current_variant.available %}
-              {% if current_variant.inventory_management and current_variant.inventory_quantity <= 10 and current_variant.inventory_quantity > 0 %}
+              {% if current_variant.inventory_management
+                and current_variant.inventory_quantity <= 10
+                and current_variant.inventory_quantity > 0
+              %}
                 Only {{ current_variant.inventory_quantity }} left
               {% else %}
                 In stock
@@ -121,8 +154,12 @@
           </p>
 
           <div class="size-links">
-            <a href="{{ routes.root_url }}pages/size-guide" class="size-guide-link">Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a>
-            <a href="{{ routes.root_url }}pages/size-guide" class="size-guide-link">Size guide <span class="material-icons-outlined">arrow_forward</span></a>
+            <a href="{{ routes.root_url }}pages/size-guide" class="size-guide-link"
+              >Size &amp; Fit <span class="material-icons-outlined">expand_more</span></a
+            >
+            <a href="{{ routes.root_url }}pages/size-guide" class="size-guide-link"
+              >Size guide <span class="material-icons-outlined">arrow_forward</span></a
+            >
           </div>
 
           <!-- Action Buttons -->
@@ -133,7 +170,9 @@
                 name="add"
                 class="add-to-bag-btn"
                 data-add-to-bag
-                {% unless current_variant.available %}disabled{% endunless %}
+                {% unless current_variant.available %}
+                  disabled
+                {% endunless %}
               >
                 {% if current_variant.available %}
                   Add to Bag – {{ current_variant.price | money }}
@@ -146,9 +185,7 @@
                 <span class="material-icons-outlined">favorite_border</span>
               </button>
             </div>
-            <p class="eco-message">
-              Every item plants 10 trees <span>🌲</span>
-            </p>
+            <p class="eco-message">Every item plants 10 trees <span>🌲</span></p>
           </div>
         </div>
       </div>
@@ -177,121 +214,127 @@
 </script>
 
 <script>
-(function() {
-  const sectionId = '{{ section.id }}';
-  const form = document.getElementById('product-form');
-  if (!form) return;
+  (function () {
+    const sectionId = '{{ section.id }}';
+    const form = document.getElementById('product-form');
+    if (!form) return;
 
-  const variantsData = document.getElementById('ProductVariants-' + sectionId);
-  const variants = variantsData ? JSON.parse(variantsData.textContent) : [];
+    const variantsData = document.getElementById('ProductVariants-' + sectionId);
+    const variants = variantsData ? JSON.parse(variantsData.textContent) : [];
 
-  const variantInput = form.querySelector('[data-variant-id]');
-  const priceEl = form.querySelector('[data-price]');
-  const compareAtPriceEl = form.querySelector('[data-compare-at-price]');
-  const priceWrapper = form.querySelector('[data-price-wrapper]');
-  const addToBagBtn = form.querySelector('[data-add-to-bag]');
-  const variantAvailableEl = form.querySelector('[data-variant-available]');
-  const optionButtons = form.querySelectorAll('[data-option-position][data-option-value]');
-  const imageContainers = form.querySelectorAll('[data-image-id]');
+    const variantInput = form.querySelector('[data-variant-id]');
+    const priceEl = form.querySelector('[data-price]');
+    const compareAtPriceEl = form.querySelector('[data-compare-at-price]');
+    const priceWrapper = form.querySelector('[data-price-wrapper]');
+    const addToBagBtn = form.querySelector('[data-add-to-bag]');
+    const variantAvailableEl = form.querySelector('[data-variant-available]');
+    const optionButtons = form.querySelectorAll('[data-option-position][data-option-value]');
+    const imageContainers = form.querySelectorAll('[data-image-id]');
 
-  function getSelectedOptions() {
-    const selected = {};
-    optionButtons.forEach(function(btn) {
-      if (btn.classList.contains('selected')) {
-        selected[parseInt(btn.dataset.optionPosition, 10)] = btn.dataset.optionValue;
-      }
-    });
-    return selected;
-  }
-
-  function findVariant(selected) {
-    return variants.find(function(v) {
-      return (v.option1 || null) === (selected[1] || null) &&
-             (v.option2 || null) === (selected[2] || null) &&
-             (v.option3 || null) === (selected[3] || null);
-    });
-  }
-
-  function formatMoney(cents) {
-    return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: '{{ cart.currency.iso_code }}' });
-  }
-
-  function updateUI(variant) {
-    if (!variant) return;
-
-    variantInput.value = variant.id;
-
-    if (priceEl) {
-      priceEl.textContent = formatMoney(variant.price);
-    }
-    if (compareAtPriceEl) {
-      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
-        compareAtPriceEl.textContent = formatMoney(variant.compare_at_price);
-        compareAtPriceEl.hidden = false;
-      } else {
-        compareAtPriceEl.hidden = true;
-      }
-    }
-
-    if (addToBagBtn) {
-      addToBagBtn.disabled = !variant.available;
-      addToBagBtn.textContent = variant.available ? 'Add to Bag – ' + formatMoney(variant.price) : 'Sold out';
-    }
-
-    if (variantAvailableEl) {
-      if (variant.available) {
-        if (variant.inventory_quantity != null && variant.inventory_quantity <= 10 && variant.inventory_quantity > 0) {
-          variantAvailableEl.textContent = 'Only ' + variant.inventory_quantity + ' left';
-        } else {
-          variantAvailableEl.textContent = 'In stock';
-        }
-      } else {
-        variantAvailableEl.textContent = 'Sold out';
-      }
-    }
-
-    // Update selected option labels
-    form.querySelectorAll('[data-option-selected-value]').forEach(function(span) {
-      const optionBlock = span.closest('[data-option-selected]');
-      if (!optionBlock) return;
-      const pos = parseInt(optionBlock.dataset.optionSelected, 10);
-      const val = variant['option' + pos];
-      if (val) span.textContent = val;
-    });
-
-    // Switch active image if variant has a featured image
-    if (variant.featured_image_id && imageContainers.length) {
-      imageContainers.forEach(function(container) {
-        if (parseInt(container.dataset.imageId, 10) === variant.featured_image_id) {
-          container.classList.add('active');
-          var img = container.querySelector('img');
-          if (img && variant.featured_image_src) img.src = variant.featured_image_src;
-        } else {
-          container.classList.remove('active');
+    function getSelectedOptions() {
+      const selected = {};
+      optionButtons.forEach(function (btn) {
+        if (btn.classList.contains('selected')) {
+          selected[parseInt(btn.dataset.optionPosition, 10)] = btn.dataset.optionValue;
         }
       });
+      return selected;
     }
-  }
 
-  optionButtons.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      if (btn.disabled) return;
-      var position = parseInt(btn.dataset.optionPosition, 10);
-      form.querySelectorAll('button[data-option-position="' + position + '"]').forEach(function(b) {
-        b.classList.remove('selected');
+    function findVariant(selected) {
+      return variants.find(function (v) {
+        return (
+          (v.option1 || null) === (selected[1] || null) &&
+          (v.option2 || null) === (selected[2] || null) &&
+          (v.option3 || null) === (selected[3] || null)
+        );
       });
-      btn.classList.add('selected');
-      var selected = getSelectedOptions();
-      var variant = findVariant(selected);
-      if (variant) updateUI(variant);
-    });
-  });
+    }
 
-  // Initialize: ensure first available variant options are marked selected (Liquid may have set selected_value)
-  var selected = getSelectedOptions();
-  var current = findVariant(selected) || variants[0];
-  if (current) updateUI(current);
-})();
+    function formatMoney(cents) {
+      return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: '{{ cart.currency.iso_code }}' });
+    }
+
+    function updateUI(variant) {
+      if (!variant) return;
+
+      variantInput.value = variant.id;
+
+      if (priceEl) {
+        priceEl.textContent = formatMoney(variant.price);
+      }
+      if (compareAtPriceEl) {
+        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+          compareAtPriceEl.textContent = formatMoney(variant.compare_at_price);
+          compareAtPriceEl.hidden = false;
+        } else {
+          compareAtPriceEl.hidden = true;
+        }
+      }
+
+      if (addToBagBtn) {
+        addToBagBtn.disabled = !variant.available;
+        addToBagBtn.textContent = variant.available ? 'Add to Bag – ' + formatMoney(variant.price) : 'Sold out';
+      }
+
+      if (variantAvailableEl) {
+        if (variant.available) {
+          if (
+            variant.inventory_quantity != null &&
+            variant.inventory_quantity <= 10 &&
+            variant.inventory_quantity > 0
+          ) {
+            variantAvailableEl.textContent = 'Only ' + variant.inventory_quantity + ' left';
+          } else {
+            variantAvailableEl.textContent = 'In stock';
+          }
+        } else {
+          variantAvailableEl.textContent = 'Sold out';
+        }
+      }
+
+      // Update selected option labels
+      form.querySelectorAll('[data-option-selected-value]').forEach(function (span) {
+        const optionBlock = span.closest('[data-option-selected]');
+        if (!optionBlock) return;
+        const pos = parseInt(optionBlock.dataset.optionSelected, 10);
+        const val = variant['option' + pos];
+        if (val) span.textContent = val;
+      });
+
+      // Switch active image if variant has a featured image
+      if (variant.featured_image_id && imageContainers.length) {
+        imageContainers.forEach(function (container) {
+          if (parseInt(container.dataset.imageId, 10) === variant.featured_image_id) {
+            container.classList.add('active');
+            var img = container.querySelector('img');
+            if (img && variant.featured_image_src) img.src = variant.featured_image_src;
+          } else {
+            container.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    optionButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        var position = parseInt(btn.dataset.optionPosition, 10);
+        form.querySelectorAll('button[data-option-position="' + position + '"]').forEach(function (b) {
+          b.classList.remove('selected');
+        });
+        btn.classList.add('selected');
+        var selected = getSelectedOptions();
+        var variant = findVariant(selected);
+        if (variant) updateUI(variant);
+      });
+    });
+
+    // Initialize: ensure first available variant options are marked selected (Liquid may have set selected_value)
+    var selected = getSelectedOptions();
+    var current = findVariant(selected) || variants[0];
+    if (current) updateUI(current);
+  })();
 </script>
 
 <!-- Floating CTA Button -->
@@ -309,7 +352,5 @@
   "tag": "section",
   "class": "product-section",
   "settings": []
-
-
 }
 {% endschema %}
